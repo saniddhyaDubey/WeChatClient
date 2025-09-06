@@ -1,25 +1,11 @@
 cmake_minimum_required(VERSION 3.10)
+project(WeChatClient LANGUAGES CXX)
 
-# Project name and language
-project(MyApp LANGUAGES CXX)
-
-# Path to PostgreSQL (use forward slashes)
-set(POSTGRESQL_INCLUDE_DIR "C:/Program Files/PostgreSQL/17/include")
-set(POSTGRESQL_LIB "C:/Program Files/PostgreSQL/17/lib/libpq.lib")
-
-# Create executable from main.cpp
-add_executable(MyApp ./src/Client.cpp)
-
-# Include PostgreSQL headers
-target_include_directories(MyApp PRIVATE ${POSTGRESQL_INCLUDE_DIR})
-target_include_directories(MyApp PRIVATE ${CMAKE_SOURCE_DIR}/include)
-
-# Link PostgreSQL library
-target_link_libraries(MyApp PRIVATE ${POSTGRESQL_LIB})
-
-# Set C++ standard
-set_target_properties(MyApp PROPERTIES
-    CXX_STANDARD 17
-    CXX_STANDARD_REQUIRED YES
-    CXX_EXTENSIONS NO
+set(SOURCES
+    ./src/main.cpp
+    ./src/unix_client.cpp
 )
+
+add_executable(WeChatClient ${SOURCES})
+
+target_include_directories(WeChatClient PRIVATE ${CMAKE_SOURCE_DIR}/include)
