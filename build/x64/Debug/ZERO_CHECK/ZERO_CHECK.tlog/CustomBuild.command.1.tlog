@@ -1,0 +1,10 @@
+^C:\USERS\ASKAK\DOCUMENTS\PROGRAMING\CPP PROJECTS\WECHATCLIENT\BUILD\CMAKEFILES\BEBCEAFCE934A3C1749C69DBD934AB6F\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/askak/Documents/Programing/CPP Projects/WeChatClient" "-BC:/Users/askak/Documents/Programing/CPP Projects/WeChatClient/build" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "C:/Users/askak/Documents/Programing/CPP Projects/WeChatClient/build/MyApp.sln"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

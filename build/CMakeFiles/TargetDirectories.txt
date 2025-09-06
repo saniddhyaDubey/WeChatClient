@@ -1,0 +1,3 @@
+C:/Users/askak/Documents/Programing/CPP Projects/WeChatClient/build/CMakeFiles/MyApp.dir
+C:/Users/askak/Documents/Programing/CPP Projects/WeChatClient/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/askak/Documents/Programing/CPP Projects/WeChatClient/build/CMakeFiles/ZERO_CHECK.dir
