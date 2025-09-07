@@ -1,3 +1,4 @@
+#ifdef __APPLE__
 #include "unix_client.h"
 
 namespace US {
@@ -43,9 +44,10 @@ namespace US {
 
         std::cout<<"Connected! \n";
 
-        const char* message = "Hello, server!";
+        const char* message = "Kya be gand mare ghur kyu raha hai";
         send(client_socket, message, strlen(message), 0);
 
         close(client_socket);
     }
 };
+#endif

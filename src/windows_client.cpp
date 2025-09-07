@@ -1,3 +1,4 @@
+#ifdef _WIN32
 #include "windows_client.h"
 
 
@@ -46,3 +47,4 @@ void WS::ConnectWithServer(){
 int WS::SendData(std::string data){
     return send(client_socket, data.c_str(), data.length(), 0);
 }
+#endif

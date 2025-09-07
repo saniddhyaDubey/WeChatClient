@@ -1,13 +1,16 @@
 #include <iostream>
 #include<thread>
-#include "windows_client.h"
+
+#ifdef _WIN32
+    #include "windows_client.h"
+#elif __APPLE__
+    #include "unix_client.h"
+#endif
 
 int main(){
-    
     std::cout<<"-------------------------------------------------WELCOME TO WECHAT----------------------------------\n";
 
     #ifdef _WIN32
-    {
         std::cout << "Windows OS\n";
 
         WS::Initialize();
@@ -29,14 +32,11 @@ int main(){
 
         closesocket(WS::client_socket);
         WSACleanup();
-
-    }
-    #else
-    {
-        std::cout << "Non Windows OS\n";
-    }
+    #elif __APPLE__
+        std::cout << "UNIX OS\n";
+        US::createSocket(AF_INET, SOCK_STREAM, 0);
+        US::connectToServer();
     #endif
 
     return 0;
-
 }
