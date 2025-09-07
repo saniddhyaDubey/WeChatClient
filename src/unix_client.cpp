@@ -3,7 +3,6 @@
 #include "unix_client.h"
 
 int US::client_socket;
-sockaddr_in US::server_info;
 
 void US::createSocket(int domain, int type, int protocol){
     client_socket = socket(domain, type, protocol);
@@ -17,8 +16,7 @@ void US::createSocket(int domain, int type, int protocol){
 }
 
 void US::connectToServer(){
-    std::cout<<"Connect to server function called! \n";
-
+    sockaddr_in server_info;
     server_info.sin_family = AF_INET;
     server_info.sin_port = htons(CONFIG::SERVER_PORT);
 

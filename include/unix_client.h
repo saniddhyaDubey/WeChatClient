@@ -9,7 +9,6 @@
 
 namespace US {
     extern int client_socket;           //extern is avoiding definition of the variable here
-    extern sockaddr_in server_info;
 
     void createSocket(int, int, int);   //create a socket for client!
     void connectToServer();             //connect with the server!
