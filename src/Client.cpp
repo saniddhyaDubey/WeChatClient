@@ -1,73 +1,72 @@
 #include <iostream>
-#include<thread>
-#include<string>
+#include <thread>
+#include <sstream>
+#include <string>
 
 #ifdef _WIN32
-    #include "windows_client.h"
+#define CLEAR_COMMAND "cls"
+#include "windows_client.h"
 
-    void SendInformation(SOCKET &client_socket){
-
-        std::string user_input;
-
-        while(true){
-
-            std::getline(std::cin, user_input);
-
-            if(user_input=="quit");
-            
-        }
-
-    }    
+void SendInformation(SOCKET &client_socket)
+{
+    std::string user_input;
+}
 
 #elif __APPLE__
-    #include "unix_client.h"
+#include "unix_client.h"
+#define CLEAR_COMMAND "clear"
 #endif
 
-static std::string rule_book = "Instructions: /register : Register  /login : Login  /switch username : switch chat   /quit : Exit\n"; 
+static std::string rule_book = "Instructions: /register : Register  /login : Login  /switch username : switch chat   /quit : Exit\n";
 
-int main(){
-    std::cout<<"-------------------------------------------------WELCOME TO WECHAT-----------------------------------------\n";
+int main()
+{
+    std::cout << "-------------------------------------------------WELCOME TO WECHAT-----------------------------------------\n";
 
-    #ifdef _WIN32
-        std::cout <<rule_book;
+    std::string user_input;
+    while (true)
+    {
+        std::cout<<rule_book<<std::endl;
+        std::getline(std::cin, user_input);
+        std::istringstream iss(user_input);
+        std::string command;
+        iss >> command;
 
-        WS::Initialize();
-
-        WS::CreateSocket();
-
-        WS::ConnectWithServer();
-
-        std::string data_to_send = "Hi Server! Client here";
-
-        // unsigned int bytes_sent = WS::SendData(data_to_send);
-
-        // if (bytes_sent == SOCKET_ERROR) {
-        //     std::cerr << "Failed to send the data!";
-        //     closesocket(WS::client_socket);
-        //     WSACleanup();
-        //     exit(-1);
-        // }
-
-        // closesocket(WS::client_socket);
-        // WSACleanup();
-
-        std::thread send_thread(SendInformation,std::ref(WS::client_socket));
-
-    #elif __APPLE__
-        std::cout << "UNIX OS\n";
-        US::createSocket(AF_INET, SOCK_STREAM, 0);
-        US::connectToServer();
-
-        std::string data_to_send = "Hey server, this is apple client!";
-
-        int send_response = US::sendData(data_to_send);
-
-        if (send_response == -1){
-            std::cerr << "Failed to send the data!";
-            close(US::client_socket);
-            //do we need to terminate the program or give any other option ?   
+        if (command == "/register")
+        {
         }
-    #endif
+        else if (command == "/login")
+        {
+            // handle login
+
+        #ifdef _WIN32
+
+        #elif __APPLE__
+            std::cout << "UNIX OS\n";
+            US::createSocket(AF_INET, SOCK_STREAM, 0);
+            US::connectToServer();
+
+            std::string data_to_send = "Hey server, this is apple client!";
+
+            int send_response = US::sendData(data_to_send);
+
+            if (send_response == -1)
+            {
+                std::cerr << "Failed to send the data!";
+                close(US::client_socket);
+                // do we need to terminate the program or give any other option ?
+            }
+        #endif
+        }
+        else if (command == "quit")
+        {
+            break;
+        }
+        else
+        {
+            std::cout << "Unknown command! Please check the instructions above" << std::endl;
+        }
+    }
 
     return 0;
 }
