@@ -13,4 +13,5 @@ namespace US {
 
     void createSocket(int, int, int);   //create a socket for client!
     void connectToServer();             //connect with the server!
+    int sendData(std::string data);     //send data to the server!
 };
