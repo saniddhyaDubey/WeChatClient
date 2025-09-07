@@ -42,6 +42,6 @@ void US::connectToServer(){
 }
 
 int US::sendData(std::string data){
-    return send(client_socket, message.c_str(), strlen(message), 0);
+    return send(client_socket, data.c_str(), data.length(), 0);
 }
 #endif
