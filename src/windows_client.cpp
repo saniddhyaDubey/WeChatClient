@@ -3,7 +3,7 @@
 
 
 SOCKET WS::client_socket                = INVALID_SOCKET;
-std::string WS::server_ip_address       = "10.148.29.31";
+std::string WS::server_ip_address       = "10.106.1.36";
 unsigned int WS::server_port_number     = 12345;
 
 void WS::Initialize(){
