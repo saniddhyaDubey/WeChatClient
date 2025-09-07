@@ -1,4 +1,5 @@
 #ifdef __APPLE__
+#include "config.h"
 #include "unix_client.h"
 
 int US::client_socket;
@@ -17,13 +18,11 @@ void US::createSocket(int domain, int type, int protocol){
 
 void US::connectToServer(){
     std::cout<<"Connect to server function called! \n";
-    const int SERVER_PORT = 12345;
-    const std::string SERVER_IP_ADDRESS = "10.106.1.36";
 
     server_info.sin_family = AF_INET;
-    server_info.sin_port = htons(SERVER_PORT);
+    server_info.sin_port = htons(CONFIG::SERVER_PORT);
 
-    if(inet_pton(AF_INET, SERVER_IP_ADDRESS.c_str(), &server_info.sin_addr.s_addr) != 1){   //Error case
+    if(inet_pton(AF_INET, CONFIG::SERVER_IP.c_str(), &server_info.sin_addr.s_addr) != 1){   //Error case
         std::cerr << "Error: Server configuration \n";
         close(client_socket);
         return;

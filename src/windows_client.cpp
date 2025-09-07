@@ -1,10 +1,8 @@
 #ifdef _WIN32
+#include "config.h"
 #include "windows_client.h"
 
-
 SOCKET WS::client_socket                = INVALID_SOCKET;
-std::string WS::server_ip_address       = "10.106.1.36";
-unsigned int WS::server_port_number     = 12345;
 
 void WS::Initialize(){
 
@@ -26,9 +24,9 @@ void WS::CreateSocket(){
 void WS::ConnectWithServer(){
     SOCKADDR_IN server_address;
     server_address.sin_family = AF_INET;
-    server_address.sin_port = htons(server_port_number);
+    server_address.sin_port = htons(CONFIG::SERVER_PORT);
 
-    if (InetPtonA(AF_INET, server_ip_address.c_str(), &server_address.sin_addr) != 1) {
+    if (InetPtonA(AF_INET, CONFIG::SERVER_IP.c_str(), &server_address.sin_addr) != 1) {
         std::cerr << "Failed to create socket address!";
         closesocket(client_socket);
         WSACleanup();

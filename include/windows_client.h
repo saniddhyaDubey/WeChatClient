@@ -9,10 +9,6 @@ namespace WS{
 
     extern SOCKET client_socket;
 
-    extern std::string server_ip_address;
-
-    extern unsigned int server_port_number;
-
     void Initialize(); // initialize winsock
 
     void CreateSocket(); // create socket
