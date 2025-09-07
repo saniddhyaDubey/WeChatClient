@@ -2,23 +2,22 @@
 #include<iostream>
 #include<WS2tcpip.h>
 #include<WinSock2.h>
-#include<thread>
 #include<tchar.h>
 #pragma comment(lib,"ws2_32.lib")
 
 namespace WS{
 
-    SOCKET client_socket;
+    extern SOCKET client_socket;
 
-    std::string server_ip_address = "127.0.0.1";
+    extern std::string server_ip_address;
 
-    unsigned int server_port_number      = 12345;
+    extern unsigned int server_port_number;
 
-    bool Initialize(); // initialize winsock
+    void Initialize(); // initialize winsock
 
     void CreateSocket(); // create socket
 
     void ConnectWithServer(); // connect with server
 
-
+    int SendData(std::string data); // send data
 }
