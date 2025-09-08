@@ -35,6 +35,17 @@ int main()
 
         if (command == "/register")
         {
+            std::string username, password, secret_key;
+            std::cout << "Enter username: ";
+            std::getline(std::cin, username);
+
+            std::cout << "Enter password: ";
+            std::getline(std::cin, password);
+
+            std::cout << "Enter secret key: ";
+            std::getline(std::cin, secret_key);
+
+            bool user_register = registerUser(username, password, secret_key);
         }
         else if (command == "/login")
         {
