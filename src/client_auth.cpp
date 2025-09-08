@@ -12,7 +12,7 @@ bool registerUser(const std::string &username, const std::string &password, cons
         return false;
     }
 
-    const std::string SERVER_URL = std::format("http://{}:{}/registerUser", CONFIG::SERVER_IP, CONFIG::SERVER_PORT);
+    const std::string SERVER_URL = std::format("http://{}:{}/register", CONFIG::SERVER_IP, CONFIG::SERVER_PORT);
 
     nlohmann::json request_body_json = {
         {"username", username},
@@ -20,15 +20,15 @@ bool registerUser(const std::string &username, const std::string &password, cons
         {"secretKey", secret_key}
     };
 
-    const std::string request_body_string = requestBody.dump();
+    const std::string request_body_string = request_body_json.dump();
 
     cpr::Response register_response = cpr::Post(
         cpr::Url{SERVER_URL},
-        cpr::Body{request_body_string}
+        cpr::Body{request_body_string},
         cpr::Header{{"accept", "application/json"}}
     );
 
-    if(register_respone != 200){
+    if(register_response.status_code != (long) 200){
         std::cerr << "Error: Registration Failed\n";
         return false;   
     }
