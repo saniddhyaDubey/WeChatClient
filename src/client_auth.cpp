@@ -1,10 +1,4 @@
-// Register and login function
-#include <iostream>
-#include <format>
-#include <string>
-#include "config.h"
-#include <cpr/cpr.h>
-#include <nlohmann/json.hpp>
+#include "client_auth.h"
 
 bool registerUser(const std::string &username, const std::string &password, const std::string &secret_key){
     if(username.empty() || password.empty() || secret_key.empty()){
@@ -37,7 +31,7 @@ bool registerUser(const std::string &username, const std::string &password, cons
     return true;
 }
 
-bool LoginUser(std::string username, std::string password, std::string secret_key){
+bool loginUser(std::string username, std::string password, std::string secret_key){
 
     nlohmann::json json_body = {
         {"username" , username},

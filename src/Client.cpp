@@ -12,8 +12,9 @@
 #include "unix_client.h"
 #define CLEAR_COMMAND "clear"
 #endif
-bool testCPR();
+
 static std::string rule_book = "Instructions: /register : Register  /login : Login  /switch username : switch chat   /quit : Exit\n";
+
 int main()
 {
     std::cout << "-------------------------------------------------WELCOME TO WECHAT-----------------------------------------\n";
@@ -50,7 +51,7 @@ int main()
         std::cin>>password;    
         std::cout<<"Enter secret key\n";
         std::cin>>secret_key;
-        bool res = LoginUser(username,password,secret_key);
+        bool res = loginUser(username,password,secret_key);
         
 
 
