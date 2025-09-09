@@ -12,7 +12,7 @@
 #include "unix_client.h"
 #define CLEAR_COMMAND "clear"
 #endif
-bool testCPR();
+
 static std::string rule_book = "Instructions: /register : Register  /login : Login  /switch username : switch chat   /quit : Exit\n";
 int main()
 {
@@ -44,13 +44,15 @@ int main()
         else if (command == "/login")
         {
             
-        std::cout<<"Enter Username\n";
-        std::cin>>username;
-        std::cout<<"Enter Password\n";
-        std::cin>>password;    
-        std::cout<<"Enter secret key\n";
-        std::cin>>secret_key;
-        bool res = LoginUser(username,password,secret_key);
+            std::cout << "Enter username: ";
+            std::getline(std::cin, username);
+
+            std::cout << "Enter password: ";
+            std::getline(std::cin, password);
+
+            std::cout << "Enter secret key: ";
+            std::getline(std::cin, secret_key);
+            bool res = LoginUser(username,password,secret_key);
         
 
 

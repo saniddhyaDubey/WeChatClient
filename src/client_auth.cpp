@@ -3,6 +3,7 @@
 #include <format>
 #include <string>
 #include "config.h"
+#include "client_auth.h"
 #include <cpr/cpr.h>
 #include <nlohmann/json.hpp>
 
