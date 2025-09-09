@@ -13,7 +13,7 @@ bool registerUser(const std::string &username, const std::string &password, cons
     }
 
     const std::string SERVER_URL = std::format("http://{}:{}/register", CONFIG::SERVER_IP, CONFIG::SERVER_PORT);
-
+ 
     nlohmann::json request_body_json = {
         {"username", username},
         {"password", password},
@@ -35,4 +35,31 @@ bool registerUser(const std::string &username, const std::string &password, cons
 
     std::cout << "User registered successfully!\n";
     return true;
+}
+
+bool LoginUser(std::string username, std::string password, std::string secret_key){
+
+    nlohmann::json json_body = {
+        {"username" , username},
+        {"password" , password},
+        {"secret_key" , secret_key}
+    };
+
+    std::string url = "http://" + CONFIG::SERVER_IP + ":"+ std::to_string(CONFIG::SERVER_PORT) + "/login";
+    std::cout<<url<<std::endl;
+    cpr::Response r = cpr::Post(
+    cpr::Url{url},
+    cpr::Header{{"Content-Type", "application/json"}},
+    cpr::Body{json_body.dump()}
+    );
+
+    std::cout<<r.status_code<<std::endl;
+
+    if (r.status_code == 200) {
+    std::cout << "Login successful! Response:\n" << r.text << std::endl;
+    return true;
+    } else {
+        std::cerr << "Login failed. Status code: " << r.status_code << std::endl;
+    }
+    return false;
 }

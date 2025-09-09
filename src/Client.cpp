@@ -2,29 +2,24 @@
 #include <thread>
 #include <sstream>
 #include <string>
-
+#include "client_auth.h"
 
 #ifdef _WIN32
 #define CLEAR_COMMAND "cls"
 #include "windows_client.h"
 
-void SendInformation(SOCKET &client_socket)
-{
-    std::string user_input;
-}
-
 #elif __APPLE__
 #include "unix_client.h"
 #define CLEAR_COMMAND "clear"
 #endif
-
+bool testCPR();
 static std::string rule_book = "Instructions: /register : Register  /login : Login  /switch username : switch chat   /quit : Exit\n";
-
 int main()
 {
     std::cout << "-------------------------------------------------WELCOME TO WECHAT-----------------------------------------\n";
 
-    std::string user_input;
+    std::string user_input,username,password,secret_key;
+
     while (true)
     {
         std::cout<<rule_book<<std::endl;
@@ -35,7 +30,6 @@ int main()
 
         if (command == "/register")
         {
-            std::string username, password, secret_key;
             std::cout << "Enter username: ";
             std::getline(std::cin, username);
 
@@ -49,7 +43,16 @@ int main()
         }
         else if (command == "/login")
         {
-            // handle login
+            
+        std::cout<<"Enter Username\n";
+        std::cin>>username;
+        std::cout<<"Enter Password\n";
+        std::cin>>password;    
+        std::cout<<"Enter secret key\n";
+        std::cin>>secret_key;
+        bool res = LoginUser(username,password,secret_key);
+        
+
 
         #ifdef _WIN32
 
@@ -70,7 +73,7 @@ int main()
             }
         #endif
         }
-        else if (command == "quit")
+        else if (command == "/quit")
         {
             break;
         }
