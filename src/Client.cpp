@@ -59,7 +59,7 @@ int main()
 
         #elif __APPLE__
             std::cout << "UNIX OS\n";
-            US::createSocket(AF_INET, SOCK_STREAM, 0);
+            US::createSocket();
             US::connectToServer();
 
             std::string data_to_send = "Hey server, this is apple client!";
