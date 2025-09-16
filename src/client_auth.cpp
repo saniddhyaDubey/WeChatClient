@@ -22,22 +22,22 @@ bool registerUser(const std::string &username, const std::string &password, cons
         cpr::Header{{"accept", "application/json"}}
     );
 
-    if(register_response.status_code != (long) 200){
+    if(register_response.status_code == (long) 200){
         std::cerr << "Successfull Registration! You can login now.\n";
         return true;   
     }
 
-    else if(register_response.status_code != (long) 403){
+    else if(register_response.status_code == (long) 403){
         std::cerr << "Incorrect Secret Key!\n";
         return false;   
     }
 
-    else if(register_response.status_code != (long) 409){
+    else if(register_response.status_code == (long) 409){
         std::cerr << "Username taken! Please use another username.\n";
         return false;   
     }
 
-    else if(register_response.status_code != (long) 500){
+    else if(register_response.status_code == (long) 500){
         std::cerr << "Registration failed! Server error.\n";
         return false;   
     }
@@ -60,12 +60,25 @@ bool loginUser(std::string username, std::string password){
     cpr::Body{json_body.dump()}
     );
 
-    if (r.status_code == 200) {
+    if (r.status_code == (long) 200) {
         std::cout << "Login successful!\nResponse:" << r.text << std::endl;
         return true;
     }
 
-    std::cerr << "Login failed. Status code: " << r.status_code << std::endl;
-    std::cerr << "Response: " << r.text << std::endl;
-    return false;
+    else if(register_response.status_code == (long) 400){
+        std::cerr << "Please enter username and password!\n";
+        return false;   
+    }
+
+    else if(register_response.status_code == (long) 401){
+        std::cerr << "Invalid Username or password.\n";
+        return false;   
+    }
+
+    else if(register_response.status_code == (long) 500){
+        std::cerr << "Login failed! Server error.\n";
+        return false;   
+    }
+    
+    return true;
 }
