@@ -31,29 +31,26 @@ bool registerUser(const std::string &username, const std::string &password, cons
     return true;
 }
 
-bool loginUser(std::string username, std::string password, std::string secret_key){
+bool loginUser(std::string username, std::string password){
 
     nlohmann::json json_body = {
         {"username" , username},
-        {"password" , password},
-        {"secret_key" , secret_key}
+        {"password" , password}
     };
 
     std::string url = "http://" + CONFIG::SERVER_IP + ":"+ std::to_string(CONFIG::SERVER_PORT) + "/login";
-    std::cout<<url<<std::endl;
     cpr::Response r = cpr::Post(
     cpr::Url{url},
     cpr::Header{{"Content-Type", "application/json"}},
     cpr::Body{json_body.dump()}
     );
 
-    std::cout<<r.status_code<<std::endl;
-
     if (r.status_code == 200) {
-    std::cout << "Login successful! Response:\n" << r.text << std::endl;
-    return true;
-    } else {
-        std::cerr << "Login failed. Status code: " << r.status_code << std::endl;
+        std::cout << "Login successful!\nResponse:" << r.text << std::endl;
+        return true;
     }
+
+    std::cerr << "Login failed. Status code: " << r.status_code << std::endl;
+    std::cerr << "Response: " << r.text << std::endl;
     return false;
 }

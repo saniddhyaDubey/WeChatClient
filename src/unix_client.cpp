@@ -12,7 +12,7 @@ void US::createSocket(){
         exit(-1);
     }
 
-    std::cout<<"Client Socket is created! \n";
+    // std::cout<<"Client Socket is created! \n";
 }
 
 void US::connectToServer(){
@@ -26,11 +26,11 @@ void US::connectToServer(){
         return;
     }
 
-    std::cout<<"Server configured! \n";
+    // std::cout<<"Server configured! \n";
 
     int connection_response = connect(client_socket, (struct sockaddr*)&server_info, sizeof(server_info));
 
-    std::cout<<"connect called! \n";
+    // std::cout<<"connect called! \n";
 
     if(connection_response != 0){
         std::cerr << "Error: Connection issue. Err No: "<< strerror(errno) << '\n';
@@ -38,7 +38,7 @@ void US::connectToServer(){
         return;
     }
 
-    std::cout<<"Connected! \n";
+    // std::cout<<"Connected! \n";
 }
 
 int US::sendData(std::string data){

@@ -46,19 +46,16 @@ int main()
         {
             
         std::cout<<"Enter Username\n";
-        std::cin>>username;
+        std::getline(std::cin, username);
         std::cout<<"Enter Password\n";
-        std::cin>>password;    
-        std::cout<<"Enter secret key\n";
-        std::cin>>secret_key;
-        bool res = loginUser(username,password,secret_key);
+        std::getline(std::cin, password);
+        bool res = loginUser(username,password);
         
 
 
         #ifdef _WIN32
 
         #elif __APPLE__
-            std::cout << "UNIX OS\n";
             US::createSocket();
             US::connectToServer();
 
