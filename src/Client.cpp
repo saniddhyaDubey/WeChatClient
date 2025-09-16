@@ -46,22 +46,17 @@ int main()
         else if (command == "/login")
         {
             
-            std::cout << "Enter username: ";
-            std::getline(std::cin, username);
-
-            std::cout << "Enter password: ";
-            std::getline(std::cin, password);
-
-            std::cout << "Enter secret key: ";
-            std::getline(std::cin, secret_key);
-            bool res = loginUser(username,password,secret_key);
+        std::cout<<"Enter Username\n";
+        std::getline(std::cin, username);
+        std::cout<<"Enter Password\n";
+        std::getline(std::cin, password);
+        bool res = loginUser(username,password);
         
 
 
         #ifdef _WIN32
 
         #elif __APPLE__
-            std::cout << "UNIX OS\n";
             US::createSocket();
             US::connectToServer();
 

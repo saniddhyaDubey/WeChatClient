@@ -6,5 +6,5 @@
 #include <cpr/cpr.h>
 #include <nlohmann/json.hpp>
 
-bool loginUser(std::string username, std::string password, std::string secret_key);
+bool loginUser(std::string username, std::string password);
 bool registerUser(const std::string &username, const std::string &password, const std::string &secret_key);
