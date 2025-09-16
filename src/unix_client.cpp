@@ -4,8 +4,8 @@
 
 int US::client_socket;
 
-void US::createSocket(int domain, int type, int protocol){
-    client_socket = socket(domain, type, protocol);
+void US::createSocket(){
+    client_socket = socket(AF_INET, SOCK_STREAM, 0);
 
     if(client_socket < 0){
         std::cerr << "Error: Creating socket \n";
