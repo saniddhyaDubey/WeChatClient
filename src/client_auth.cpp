@@ -47,38 +47,42 @@ bool registerUser(const std::string &username, const std::string &password, cons
 
 bool loginUser(std::string username, std::string password){
 
+    if(username.empty() || password.empty()){
+        std::cerr << "Error: Enter all details\n";
+        return false;
+    }
+
     nlohmann::json json_body = {
         {"username" , username},
         {"password" , password}
     };
 
     std::string url = std::format("http://{}:{}/login", CONFIG::SERVER_IP, CONFIG::SERVER_PORT);
-    std::cout<<url<<std::endl;
-    cpr::Response r = cpr::Post(
+    cpr::Response login_response = cpr::Post(
     cpr::Url{url},
     cpr::Header{{"Content-Type", "application/json"}},
     cpr::Body{json_body.dump()}
     );
 
-    if (r.status_code == (long) 200) {
-        std::cout << "Login successful!\nResponse:" << r.text << std::endl;
+    if (login_response.status_code == (long) 200) {
+        std::cout << "Login successful!\n";
         return true;
     }
 
-    else if(register_response.status_code == (long) 400){
+    else if(login_response.status_code == (long) 400){
         std::cerr << "Please enter username and password!\n";
         return false;   
     }
 
-    else if(register_response.status_code == (long) 401){
+    else if(login_response.status_code == (long) 401){
         std::cerr << "Invalid Username or password.\n";
         return false;   
     }
 
-    else if(register_response.status_code == (long) 500){
+    else if(login_response.status_code == (long) 500){
         std::cerr << "Login failed! Server error.\n";
         return false;   
     }
-    
+
     return true;
 }
