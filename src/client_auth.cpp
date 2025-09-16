@@ -23,11 +23,25 @@ bool registerUser(const std::string &username, const std::string &password, cons
     );
 
     if(register_response.status_code != (long) 200){
-        std::cerr << "Error: Registration Failed\n";
+        std::cerr << "Successfull Registration! You can login now.\n";
+        return true;   
+    }
+
+    else if(register_response.status_code != (long) 403){
+        std::cerr << "Incorrect Secret Key!\n";
         return false;   
     }
 
-    std::cout << "User registered successfully!\n";
+    else if(register_response.status_code != (long) 409){
+        std::cerr << "Username taken! Please use another username.\n";
+        return false;   
+    }
+
+    else if(register_response.status_code != (long) 500){
+        std::cerr << "Registration failed! Server error.\n";
+        return false;   
+    }
+
     return true;
 }
 
