@@ -13,7 +13,9 @@
 #define CLEAR_COMMAND "clear"
 #endif
 
+
 static std::string rule_book = "Instructions: /register : Register  /login : Login  /switch username : switch chat   /quit : Exit\n";
+
 int main()
 {
     std::cout << "-------------------------------------------------WELCOME TO WECHAT-----------------------------------------\n";
@@ -52,7 +54,7 @@ int main()
 
             std::cout << "Enter secret key: ";
             std::getline(std::cin, secret_key);
-            bool res = LoginUser(username,password,secret_key);
+            bool res = loginUser(username,password,secret_key);
         
 
 

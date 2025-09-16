@@ -1,11 +1,4 @@
-// Register and login function
-#include <iostream>
-#include <format>
-#include <string>
-#include "config.h"
 #include "client_auth.h"
-#include <cpr/cpr.h>
-#include <nlohmann/json.hpp>
 
 bool registerUser(const std::string &username, const std::string &password, const std::string &secret_key){
     if(username.empty() || password.empty() || secret_key.empty()){
@@ -38,7 +31,7 @@ bool registerUser(const std::string &username, const std::string &password, cons
     return true;
 }
 
-bool LoginUser(std::string username, std::string password, std::string secret_key){
+bool loginUser(std::string username, std::string password, std::string secret_key){
 
     nlohmann::json json_body = {
         {"username" , username},
@@ -46,7 +39,7 @@ bool LoginUser(std::string username, std::string password, std::string secret_ke
         {"secret_key" , secret_key}
     };
 
-    std::string url = "http://" + CONFIG::SERVER_IP + ":"+ std::to_string(CONFIG::SERVER_PORT) + "/login";
+    std::string url = std::format("http://{}:{}/login", CONFIG::SERVER_IP, CONFIG::SERVER_PORT);
     std::cout<<url<<std::endl;
     cpr::Response r = cpr::Post(
     cpr::Url{url},
