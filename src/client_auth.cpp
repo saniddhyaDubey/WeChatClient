@@ -6,7 +6,7 @@ bool registerUser(const std::string &username, const std::string &password, cons
         return false;
     }
 
-    const std::string SERVER_URL = std::format("http://{}:{}/register", CONFIG::SERVER_IP, CONFIG::SERVER_PORT);
+    const std::string SERVER_URL = std::format("http://{}:{}/register", CONFIG::SERVER_IP, CONFIG::SERVER_PORT_API);
  
     nlohmann::json request_body_json = {
         {"username", username},
@@ -57,7 +57,7 @@ bool loginUser(std::string username, std::string password){
         {"password" , password}
     };
 
-    std::string url = std::format("http://{}:{}/login", CONFIG::SERVER_IP, CONFIG::SERVER_PORT);
+    std::string url = std::format("http://{}:{}/login", CONFIG::SERVER_IP, CONFIG::SERVER_PORT_API);
     cpr::Response login_response = cpr::Post(
     cpr::Url{url},
     cpr::Header{{"Content-Type", "application/json"}},
@@ -66,6 +66,7 @@ bool loginUser(std::string username, std::string password){
 
     if (login_response.status_code == (long) 200) {
         std::cout << "Login successful!\n";
+        CONFIG::client_username = username;
         return true;
     }
 

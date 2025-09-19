@@ -1,5 +1,6 @@
 #pragma once
 #include<iostream>
+#include "config.h"
 #include<WS2tcpip.h>
 #include<WinSock2.h>
 #include<tchar.h>
@@ -15,5 +16,7 @@ namespace WS{
 
     void ConnectWithServer(); // connect with server
 
-    int SendData(std::string data); // send data
+    int SendData(std::string user,std::string data); // send data
+
+    std::string RecieveData();
 }

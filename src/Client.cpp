@@ -3,9 +3,9 @@
 #include <sstream>
 #include <string>
 #include "client_auth.h"
-
+#include "chat.h"
 #ifdef _WIN32
-#define CLEAR_COMMAND "cls"
+#define CLEAR_COMMAND "cls" 
 #include "windows_client.h"
 
 #elif __APPLE__
@@ -46,13 +46,24 @@ int main()
         else if (command == "/login")
         {
             
-        std::cout<<"Enter Username\n";
+        std::cout<<"Enter Username: ";
         std::getline(std::cin, username);
-        std::cout<<"Enter Password\n";
+        std::cout<<"Enter Password: ";
         std::getline(std::cin, password);
-        bool res = loginUser(username,password);
+        bool login_result = loginUser(username,password);
         
-
+        if(login_result){
+            WS::Initialize();
+            WS::CreateSocket();
+            WS::ConnectWithServer();
+            WS::SendData("hand_shake","hand_shake");
+            std::thread send_data_thread(CHAT::sendData);
+            std::thread recieve_data_thread(CHAT::recieveData);
+            send_data_thread.join();
+            closesocket(WS::client_socket);
+            WSACleanup();
+            recieve_data_thread.join();
+        }
 
         #ifdef _WIN32
 

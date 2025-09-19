@@ -1,4 +1,6 @@
 #include "config.h"
 
-const std::string CONFIG::SERVER_IP = "10.106.14.91";
-const unsigned short CONFIG::SERVER_PORT = 12345;
+std::string CONFIG::client_username;
+const std::string CONFIG::SERVER_IP = "172.20.24.7";
+const unsigned short CONFIG::SERVER_PORT_API = 5000;
+const unsigned short CONFIG::SERVER_PORT_SOCKET = 9000;
