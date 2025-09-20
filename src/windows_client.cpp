@@ -58,7 +58,6 @@ std::string WS::RecieveData(){
     int bytes_recieved = recv(WS::client_socket,data_load,sizeof(data_load),0);
 
     if(bytes_recieved==SOCKET_ERROR){
-        std::cerr<<"Failed to recieve the data!\n";
         return "Socket closed!";
     }
         

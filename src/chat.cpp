@@ -30,11 +30,14 @@ void CHAT::sendData(){
 
                 if(data_to_send=="/stop") break;
 
+                if(data_to_send=="" || data_to_send==" "){
+                    std::cout<<"Blank Message\n";
+                    continue;
+                }
+
                 #ifdef _WIN32
 
                 int bytes_send  = WS::SendData(command_user,data_to_send);
-
-                std::cout<<bytes_send<<std::endl;
 
                 #elif __APPLE__
 
