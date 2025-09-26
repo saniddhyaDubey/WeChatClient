@@ -18,7 +18,7 @@ void US::createSocket(){
 void US::connectToServer(){
     sockaddr_in server_info;
     server_info.sin_family = AF_INET;
-    server_info.sin_port = htons(CONFIG::SERVER_PORT);
+    server_info.sin_port = htons(CONFIG::SERVER_PORT_SOCKET);
 
     if(inet_pton(AF_INET, CONFIG::SERVER_IP.c_str(), &server_info.sin_addr.s_addr) != 1){   //Error case
         std::cerr << "Error: Server configuration \n";
@@ -41,7 +41,38 @@ void US::connectToServer(){
     // std::cout<<"Connected! \n";
 }
 
-int US::sendData(std::string data){
-    return send(client_socket, data.c_str(), data.length(), 0);
+int US::sendData(std::string data, std::string recipient_user){
+    
+    nlohmann::json data_packet = {
+        {"sender" , CONFIG::client_username},
+        {"receiver" , recipient_user},
+        {"data" , data}
+    };
+
+    return send(client_socket, data_packet.dump().c_str(), data_packet.dump().length(), 0);
 }
+
+std::string US::receiveData(){
+    char buffer[1024];
+    ssize_t bytes_read = recv(client_socket, buffer, sizeof(buffer) - 1, 0);
+
+    if(bytes_read < 0) {
+        return "Socket closed!";
+    }
+
+    try {
+        buffer[bytes_read] = '\0';
+        nlohmann::json data_packet = nlohmann::json::parse(buffer);
+
+        std::string send_user = data_packet.at("sender").get<std::string>();
+        std::string data_to_send = data_packet.at("data").get<std::string>();
+
+        return send_user + " : " + data_to_send;
+
+    } catch(const nlohmann::json::exception& e) {
+        std::cerr << "JSON parsing error: " << e.what() << std::endl;
+        return "JSON parse error"; 
+    }
+}
+
 #endif
