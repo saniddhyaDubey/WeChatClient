@@ -57,8 +57,7 @@ void CHAT::sendData(){
 }
 
 void CHAT::recieveData(){
-
-    std::string extracted_message;
+    
     while(true){
 
         #ifdef _WIN32

@@ -51,7 +51,9 @@ int main()
         std::cout<<"Enter Password: ";
         std::getline(std::cin, password);
         bool login_result = loginUser(username,password);
-        
+
+        #ifdef _WIN32
+
         if(login_result){
             WS::Initialize();
             WS::CreateSocket();
@@ -64,8 +66,6 @@ int main()
             WSACleanup();
             recieve_data_thread.join();
         }
-
-        #ifdef _WIN32
 
         #elif __APPLE__
             US::createSocket();

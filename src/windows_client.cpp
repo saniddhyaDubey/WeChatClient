@@ -45,7 +45,7 @@ int WS::SendData(std::string user,std::string data){
 
     nlohmann::json data_packet = {
         {"sender" , CONFIG::client_username},
-        {"reciever" , user},
+        {"receiver" , user},
         {"data" , data}
     };
 
