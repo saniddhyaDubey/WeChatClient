@@ -41,7 +41,7 @@ void CHAT::sendData(){
 
                 #elif __APPLE__
 
-                //-------------------- apple------------------
+                int send_response = US::sendData(data_to_send, command_user);
 
                 #endif
             }
