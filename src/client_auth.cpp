@@ -46,7 +46,6 @@ bool registerUser(const std::string &username, const std::string &password, cons
 }
 
 bool loginUser(std::string username, std::string password){
-
     if(username.empty() || password.empty()){
         std::cerr << "Error: Enter all details\n";
         return false;
@@ -69,21 +68,23 @@ bool loginUser(std::string username, std::string password){
         CONFIG::client_username = username;
         return true;
     }
-
     else if(login_response.status_code == (long) 400){
         std::cerr << "Please enter username and password!\n";
         return false;   
     }
-
     else if(login_response.status_code == (long) 401){
         std::cerr << "Invalid Username or password.\n";
         return false;   
     }
-
     else if(login_response.status_code == (long) 500){
         std::cerr << "Login failed! Server error.\n";
         return false;   
     }
+    else {
+        std::cerr << "Error: " << strerror(errno) << " (errno: " << errno << ")" << std::endl;
+    }
+
+    std::cout<<"login end! \n";
 
     return true;
 }

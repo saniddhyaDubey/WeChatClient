@@ -1,5 +1,12 @@
 #include "chat.h"
 #include "config.h"
+
+#ifdef _WIN32
+#include "windows_client.h"
+#elif __APPLE__
+#include "unix_client.h"
+#endif
+
 static std::string rule_book = "Instructions: /chat username : chat username   /logout : Logout   /stop : stop chatting with current user\n";
 
 
@@ -70,7 +77,10 @@ void CHAT::recieveData(){
 
         #elif __APPLE__
 
-        // ---------------------apple----------------
+        std::string message_recieved = US::receiveData();
+        if(message_recieved=="Socket closed!") break;
+        std::cout<<message_recieved<<'\n';
+
         #endif
     }
 }   

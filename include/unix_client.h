@@ -10,7 +10,8 @@
 namespace US {
     extern int client_socket;           //extern is avoiding definition of the variable here
 
-    void createSocket();   //create a socket for client!
-    void connectToServer();             //connect with the server!
-    int sendData(std::string data);     //send data to the server!
+    void createSocket();                //create a socket for client!
+    void connectToServer();             //connect server!
+    int sendData(std::string data, std::string recipient_user);     //send data!
+    std::string receiveData();
 };

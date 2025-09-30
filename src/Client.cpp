@@ -22,6 +22,10 @@ int main()
 
     std::string user_input,username,password,secret_key;
 
+    // bool login_result = loginUser("saniddhya", "Qwerty@1234!");
+
+    // return 0;
+
     while (true)
     {
         std::cout<<rule_book<<std::endl;
@@ -43,8 +47,7 @@ int main()
 
             bool user_register = registerUser(username, password, secret_key);
         }
-        else if (command == "/login")
-        {
+        else if (command == "/login"){
             
         std::cout<<"Enter Username: ";
         std::getline(std::cin, username);
@@ -68,30 +71,24 @@ int main()
         }
 
         #elif __APPLE__
+
+        if(login_result){
             US::createSocket();
             US::connectToServer();
+            US::sendData("hand_shake", "hand_shake");
+            std::thread send_data_thread(CHAT::sendData);
+            std::thread recieve_data_thread(CHAT::recieveData);
+            send_data_thread.join();
+            close(US::client_socket);
+            recieve_data_thread.join();
+        }
 
-            std::string data_to_send = "Hey server, this is apple client!";
-
-            int send_response = US::sendData(data_to_send);
-
-            if (send_response == -1)
-            {
-                std::cerr << "Failed to send the data!";
-                close(US::client_socket);
-                // do we need to terminate the program or give any other option ?
-            }
         #endif
-        }
-        else if (command == "/quit")
-        {
+        }else if (command == "/quit"){
             break;
-        }
-        else
-        {
+        }else{
             std::cout << "Unknown command! Please check the instructions above" << std::endl;
         }
     }
-
     return 0;
 }
