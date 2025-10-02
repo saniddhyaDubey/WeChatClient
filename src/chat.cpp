@@ -1,5 +1,6 @@
 #include "chat.h"
 #include "config.h"
+#include "ui/chat_ui.h"
 
 #ifdef _WIN32
 #include "windows_client.h"
@@ -65,7 +66,7 @@ void CHAT::sendData(){
 
 void CHAT::recieveData(){
 
-    std::string extracted_message;
+    std::string sender, message;
     while(true){
 
         #ifdef _WIN32
@@ -74,14 +75,30 @@ void CHAT::recieveData(){
 
         if(message_recieved=="Socket closed!") break;
 
-        std::cout<<message_recieved<<'\n';
+        // std::cout<<message_recieved<<'\n';
 
         #elif __APPLE__
 
-        std::string message_recieved = US::receiveData();
-        if(message_recieved=="Socket closed!") break;
-        std::cout<<message_recieved<<'\n';
+        std::vector<std::string> result = US::receiveData();
+        // if(=="Socket closed!") break;
+        // std::cout<<message_recieved<<'\n';
 
         #endif
+
+        if (result.size() == 2) {
+            std::string sender = result[0];
+            std::string message = result[1];
+            
+            // Skip error messages or handle them differently
+            if (sender == "ERROR") {
+                std::cerr << "Receive error: " << message << std::endl;
+                continue;
+            }
+
+            if(message == "Socket closed!") break;
+            
+            // Add to UI
+            UI::AddReceivedMessage(sender, message);
+        }
     }
 }   
