@@ -52,12 +52,12 @@ int US::sendData(std::string data, std::string recipient_user){
     return send(client_socket, data_packet.dump().c_str(), data_packet.dump().length(), 0);
 }
 
-std::string US::receiveData(){
+std::pair<std::string, std::string> US::receiveData(){
     char buffer[1024];
     ssize_t bytes_read = recv(client_socket, buffer, sizeof(buffer) - 1, 0);
 
-    if(bytes_read < 0) {
-        return "Socket closed!";
+    if(bytes_read <= 0) {
+        return {"Server", "Close"};
     }
 
     try {
@@ -67,11 +67,11 @@ std::string US::receiveData(){
         std::string send_user = data_packet.at("sender").get<std::string>();
         std::string data_to_send = data_packet.at("data").get<std::string>();
 
-        return send_user + " : " + data_to_send;
+        return {send_user, data_to_send};
 
     } catch(const nlohmann::json::exception& e) {
         std::cerr << "JSON parsing error: " << e.what() << std::endl;
-        return "JSON parse error"; 
+        return {}; 
     }
 }
 

@@ -3,13 +3,13 @@
 #include <sstream>
 #include <string>
 #include "client_auth.h"
-#include "chat.h"
 #ifdef _WIN32
 #define CLEAR_COMMAND "cls" 
 #include "windows_client.h"
 
 #elif __APPLE__
 #include "unix_client.h"
+#include "unix_chat.h"
 #define CLEAR_COMMAND "clear"
 #endif
 
@@ -78,10 +78,12 @@ int main()
             US::createSocket();
             US::connectToServer();
             US::sendData("hand_shake", "hand_shake");
-            std::thread send_data_thread(CHAT::sendData);
-            std::thread recieve_data_thread(CHAT::recieveData);
+            // CD::init();
+            std::thread send_data_thread(CD::sendData);
+            std::thread recieve_data_thread(CD::receiveData);
             send_data_thread.join();
             close(US::client_socket);
+            // CD::cleanUpTio();
             recieve_data_thread.join();
         }
 

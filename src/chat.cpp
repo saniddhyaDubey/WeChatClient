@@ -78,9 +78,11 @@ void CHAT::recieveData(){
 
         #elif __APPLE__
 
-        std::string message_recieved = US::receiveData();
+        std::vector<std::string> received_messages = US::receiveData();
         if(message_recieved=="Socket closed!") break;
+        std::cout << "\x1b[2K\r";
         std::cout<<message_recieved<<'\n';
+        std::cout.flush();
 
         #endif
     }

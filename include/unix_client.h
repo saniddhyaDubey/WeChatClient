@@ -13,5 +13,5 @@ namespace US {
     void createSocket();                //create a socket for client!
     void connectToServer();             //connect server!
     int sendData(std::string data, std::string recipient_user);     //send data!
-    std::string receiveData();
+    std::pair<std::string, std::string> receiveData();
 };
