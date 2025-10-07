@@ -6,7 +6,7 @@
 #ifdef _WIN32
 #define CLEAR_COMMAND "cls" 
 #include "windows_client.h"
-
+#include "chat.h"
 #elif __APPLE__
 #include "unix_client.h"
 #include "unix_chat.h"
