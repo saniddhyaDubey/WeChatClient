@@ -8,7 +8,7 @@ void WS::Initialize(){
     WSADATA wsadata;
 
     if(WSAStartup(MAKEWORD(2, 2), &wsadata) !=0){
-        std::cerr << "Failed to create socket address!";
+        std::cerr << "Connection Error!";
         exit(-1);
     }
 }
@@ -52,13 +52,13 @@ int WS::SendData(std::string user,std::string data){
     return send(client_socket, data_packet.dump().c_str(), data_packet.dump().length(), 0);
 }
 
-std::string WS::RecieveData(){
+std::pair<std::string,std::string> WS::RecieveData(){
     char data_load[1024];
 
     int bytes_recieved = recv(WS::client_socket,data_load,sizeof(data_load),0);
 
-    if(bytes_recieved==SOCKET_ERROR){
-        return "Socket closed!";
+    if(bytes_recieved==SOCKET_ERROR || bytes_recieved==0){
+        return {"Server","Close"};
     }
         
     std::string message_recieved = std::string(data_load,bytes_recieved);
@@ -68,6 +68,6 @@ std::string WS::RecieveData(){
     std::string send_user = j_data.at("sender").get<std::string>();
     std::string data_to_send = j_data.at("data").get<std::string>();
 
-    return send_user + " : " + data_to_send;
+    return {send_user,data_to_send};
 }
 #endif
