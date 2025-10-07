@@ -38,11 +38,11 @@ bool registerUser(const std::string &username, const std::string &password, cons
     }
 
     else if(register_response.status_code == (long) 500){
-        std::cerr << "Registration failed! Server error.\n";
+        std::cerr << "Registration failed! Server down.\n";
         return false;   
     }
 
-    return true;
+    return false;
 }
 
 bool loginUser(std::string username, std::string password){
@@ -77,14 +77,12 @@ bool loginUser(std::string username, std::string password){
         return false;   
     }
     else if(login_response.status_code == (long) 500){
-        std::cerr << "Login failed! Server error.\n";
+        std::cerr << "Login failed! Server down.\n";
         return false;   
     }
-    else {
-        std::cerr << "Error: " << strerror(errno) << " (errno: " << errno << ")" << std::endl;
+    {
+        std::cerr << "Server down!\n";
     }
 
-    std::cout<<"login end! \n";
-
-    return true;
+    return false;
 }

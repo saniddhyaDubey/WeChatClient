@@ -18,5 +18,5 @@ namespace WS{
 
     int SendData(std::string user,std::string data); // send data
 
-    std::string RecieveData();
+    std::pair<std::string,std::string> RecieveData();
 }

@@ -14,21 +14,17 @@
 #endif
 
 
-static std::string rule_book = "Instructions: /register : Register  /login : Login  /switch username : switch chat   /quit : Exit\n";
+static std::string rule_book = "\033[35mInstructions: /register : Register  /login : Login  /switch username : switch chat   /quit : Exit\033[0m\n> : ";
 
 int main()
 {
-    std::cout << "-------------------------------------------------WELCOME TO WECHAT-----------------------------------------\n";
+    std::cout << "-------------------------------------------------WELCOME TO WECHAT-------------------------------------------------\n";
 
     std::string user_input,username,password,secret_key;
 
-    // bool login_result = loginUser("saniddhya", "Qwerty@1234!");
-
-    // return 0;
-
     while (true)
     {
-        std::cout<<rule_book<<std::endl;
+        std::cout<<rule_book;
         std::getline(std::cin, user_input);
         std::istringstream iss(user_input);
         std::string command;
@@ -54,8 +50,6 @@ int main()
         std::cout<<"Enter Password: ";
         std::getline(std::cin, password);
         bool login_result = loginUser(username,password);
-
-        // return 0;
 
         #ifdef _WIN32
 
