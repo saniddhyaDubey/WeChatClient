@@ -8,6 +8,7 @@ namespace CD {
     std::string user_cmd_buffer;
     static bool is_chatting = false;
     std::mutex console_mutex;
+    std::string current_recipient;
     std::string rule_book = "\033[35mInstructions: /chat username : chat username   /logout : Logout   /stop : stop chatting with current user\033[0m\n";
 
     void init() {
@@ -55,18 +56,18 @@ namespace CD {
                     }
                 }
 
-                std::string command_switch, command_user;
+                std::string command_switch;
                 // std::getline(std::cin, user_input);
                 std::istringstream iss(user_cmd_buffer);
                 iss >> command_switch;
-                iss >> command_user;
+                iss >> current_recipient;
 
                 if(command_switch=="/logout"){
                     user_cmd_buffer.clear();
                     cleanUpTio();
                     break;
-                }else if(command_switch=="/chat" && command_user!=""){
-                    if(command_user==CONFIG::client_username){
+                }else if(command_switch=="/chat" && current_recipient!=""){
+                    if(current_recipient==CONFIG::client_username){
                         std::cout<<"\n\033[31mEcho! Change username.\033[0m\n> : ";
                         continue;
                     }
@@ -114,7 +115,7 @@ namespace CD {
                             break;
                         }
                         
-                        int send_response = US::sendData(user_msg_buffer, command_user);
+                        int send_response = US::sendData(user_msg_buffer, current_recipient);
                         user_msg_buffer.clear();
                     }
                 }else {
@@ -145,8 +146,14 @@ namespace CD {
                     std::cout << "\r\033[K";
 
                     if(is_chatting){
-                        // Print: [SENDER]: message
-                        std::cout << "\033[36m[" << received_messages.first << "]:\033[0m " << received_messages.second << "\n";
+
+                        if(received_messages.first != current_recipient){
+                            // Print: [SENDER]: message
+                            std::cout << "\033[31m[New message from " << received_messages.first << ": " << received_messages.second << "]\033[0m\n";
+                        }else{
+                            // Print: [SENDER]: message
+                            std::cout << "\033[36m[" << received_messages.first << "]:\033[0m " << received_messages.second << "\n";
+                        }
                         
                         // Redraw the input prompt with current buffer
                         std::cout << "\033[32m[YOU]:\033[0m " << user_msg_buffer;
