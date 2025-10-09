@@ -69,7 +69,7 @@ int US::sendData(std::string data, std::string recipient_user){
     catch(const std::exception& e)
     {
         std::cerr << "\033[31m[SOMETHING WENT WRONG!!]\033[0m\n";
-        exit(-1);
+        return 0;
     }
     
 }
@@ -92,8 +92,7 @@ std::pair<std::string, std::string> US::receiveData(){
         return {send_user, data_to_send};
 
     } catch(const nlohmann::json::exception& e) {
-        std::cerr << "\033[31m[SOMETHING WENT WRONG!!]\033[0m\n";
-        exit(-1);
+        return {"Server","Someone tried sending you message!"};
     }
 }
 

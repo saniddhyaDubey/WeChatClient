@@ -6,4 +6,4 @@
 #include <cpr/cpr.h>
 
 bool loginUser(std::string username, std::string password);
-bool registerUser(const std::string &username, const std::string &password, const std::string &secret_key);
+void registerUser(const std::string &username, const std::string &password, const std::string &secret_key);

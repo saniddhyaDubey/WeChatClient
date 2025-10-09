@@ -14,13 +14,13 @@
 #endif
 
 
-static std::string rule_book = "\033[35mInstructions: /register : Register  /login : Login  /switch username : switch chat   /quit : Exit\033[0m\n> : ";
+static std::string rule_book = "\033[35mInstructions: /register : Register  /login : Login  /switch username : switch chat  /quit : Exit\033[0m\n> : ";
 
 int main()
 {
     try
     {
-        std::cout << "\033[1;96m-------------------------------------------------WELCOME TO WECHAT-----------------------------------------\033[0m\n";
+        std::cout << "\033[1;96m-------------------------------------------------WELCOME TO WECHAT-------------------------------------------------\033[0m\n";
 
         std::string user_input,username,password,secret_key;
 
@@ -43,7 +43,7 @@ int main()
                 std::cout << "Enter secret key: ";
                 std::getline(std::cin, secret_key);
 
-                bool user_register = registerUser(username, password, secret_key);
+                registerUser(username, password, secret_key);
             }
             else if (command == "/login"){
                 
@@ -85,7 +85,7 @@ int main()
             }else if (command == "/quit"){
                 break;
             }else{
-                std::cout << "\033[31mUnknown command! Please check the instructions above\033[0m\n" << std::endl;
+                std::cout << "\033[31mUnknown command! Please check the instructions above\033[0m\n";
             }
         }
         return 0;

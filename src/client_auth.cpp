@@ -1,11 +1,37 @@
 #include "client_auth.h"
 
-bool registerUser(const std::string &username, const std::string &password, const std::string &secret_key){
+void registerUser(const std::string &input_username, const std::string &input_password, const std::string &sinput_secret_key){
     try
     {
+        std::string username,password,secret_key,username_with_gap,password_with_gap;
+        std::istringstream iss;
+        iss.str(input_username);
+        iss>>username>>username_with_gap;
+        if(!username_with_gap.empty()){
+            std::cerr << "\033[31m[Username must not contain spaces.!]\033[0m\n";
+            return;
+        }
+        iss.clear();
+        iss.str("");
+        iss.str(input_password);
+        iss>>password>>password_with_gap;
+        if(!password_with_gap.empty()){
+            std::cerr << "\033[31m[Password must not contain spaces.!]\033[0m\n";
+            return;
+        }
+        iss.clear();
+        iss.str("");
+        iss.str(sinput_secret_key);
+        iss>>secret_key;
+
         if(username.empty() || password.empty() || secret_key.empty()){
-            std::cerr << "Error: Enter all the three details\n";
-            return false;
+            std::cerr << "\033[31m[Enter all details!]\033[0m\n";
+            return;
+        }
+        
+        if(username.length()>20 || password.length()>20){
+            std::cerr << "\033[31m[Username and password must be less than or 20 characters!]\033[0m\n";
+            return;
         }
 
         const std::string SERVER_URL = std::format("http://{}:{}/register", CONFIG::SERVER_IP, CONFIG::SERVER_PORT_API);
@@ -26,40 +52,59 @@ bool registerUser(const std::string &username, const std::string &password, cons
 
         if(register_response.status_code == (long) 200){
             std::cerr << "\033[92m[Successfull Registration!]\033[0m\n";
-            return true;   
+            return;
         }
 
         else if(register_response.status_code == (long) 403){
             std::cerr << "\033[31m[Wrong Secret Key!]\033[0m\n";
-            return false;   
+            return;
         }
 
         else if(register_response.status_code == (long) 409){
             std::cerr << "\033[31m[Username taken!]\033[0m\n";
-            return false;   
+            return;
+        }
+        else{
+            std::cerr << "\033[31m[CANNOT REGISTER..SERVER IS SICK!!]\033[0m\n";
+            return;
         }
 
-        else if(register_response.status_code == (long) 500){
-            std::cerr << "\033[31m[SERVER IS SICK!!]\033[0m\n";
-            return false;   
-        }
-
-        return false;
     }
     catch(const std::exception& e)
     {
         std::cerr << "\033[31m[SOMETHING WENT WRONG!!]\033[0m\n";
-        return false;
+        return;
     }
     
     
 }
 
-bool loginUser(std::string username, std::string password){
+bool loginUser(std::string input_username, std::string input_password){
     try
     {
+        std::string username,password,username_with_gap,password_with_gap;
+        std::istringstream iss;
+        iss.str(input_username);
+        iss>>username>>username_with_gap;
+        if(!username_with_gap.empty()){
+            std::cerr << "\033[31m[Wrong Credentials]\033[0m\n";
+            return false;
+        }
+        iss.clear();
+        iss.str("");
+        iss.str(input_password);
+        iss>>password>>password_with_gap;
+        if(!password_with_gap.empty()){
+            std::cerr << "\033[31m[Wrong Credentials]\033[0m\n";
+            return false;
+        }
         if(username.empty() || password.empty()){
-            std::cerr << "Error: Enter all details\n";
+            std::cerr << "\033[31m[Enter all details!]\033[0m\n";
+            return false;
+        }
+
+        if(username.length()>20 || password.length()>20){
+            std::cerr << "\033[31m[Wrong Credentials]\033[0m\n";
             return false;
         }
 
@@ -97,7 +142,7 @@ bool loginUser(std::string username, std::string password){
             return false;   
         }
         else{
-            std::cerr << "\033[31m[SERVER IS SICK!!]\033[0m\n";
+            std::cerr << "\033[31m[CANNOT LOGIN..SERVER IS SICK!!]\033[0m\n";
         }
 
         return false;
