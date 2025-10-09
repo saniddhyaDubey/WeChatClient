@@ -1,6 +1,6 @@
 #include "client_auth.h"
 
-void registerUser(const std::string &input_username, const std::string &input_password, const std::string &sinput_secret_key){
+void registerUser(const std::string &input_username, const std::string &input_password, const std::string &input_secret_key){
     try
     {
         std::string username,password,secret_key,username_with_gap,password_with_gap;
@@ -21,7 +21,7 @@ void registerUser(const std::string &input_username, const std::string &input_pa
         }
         iss.clear();
         iss.str("");
-        iss.str(sinput_secret_key);
+        iss.str(input_secret_key);
         iss>>secret_key;
 
         if(username.empty() || password.empty() || secret_key.empty()){
