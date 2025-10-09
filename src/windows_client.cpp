@@ -77,6 +77,8 @@ int WS::SendData(std::string user,std::string data){
     catch(const std::exception& e)
     {
          std::cerr << "\033[31m[SOMETHING WENT WRONG!!]\033[0m\n";
+         closesocket(client_socket);
+         WSACleanup();
          exit(-1);
     }
     
@@ -105,7 +107,7 @@ std::pair<std::string,std::string> WS::RecieveData(){
     catch(const std::exception& e)
     {
         std::cerr << "\033[31m[SOMETHING WENT WRONG!!]\033[0m\n";
-        exit(-1);
+        return {"Server","Close"};
     }
     
 }

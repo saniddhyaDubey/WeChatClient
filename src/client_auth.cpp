@@ -49,7 +49,7 @@ bool registerUser(const std::string &username, const std::string &password, cons
     catch(const std::exception& e)
     {
         std::cerr << "\033[31m[SOMETHING WENT WRONG!!]\033[0m\n";
-        exit(-1);
+        return false;
     }
     
     
@@ -92,7 +92,11 @@ bool loginUser(std::string username, std::string password){
             std::cerr << "\033[31m[Login failed!]\033[0m\n";
             return false;   
         }
-        {
+        else if(login_response.status_code == (long) 250){
+            std::cerr << "\033[31m[Duplicate session!]\033[0m\n";
+            return false;   
+        }
+        else{
             std::cerr << "\033[31m[SERVER IS SICK!!]\033[0m\n";
         }
 
@@ -101,6 +105,6 @@ bool loginUser(std::string username, std::string password){
     catch(const std::exception& e)
     {
         std::cerr << "\033[31m[SOMETHING WENT WRONG!!]\033[0m\n";
-        exit(-1);
+        return false;
     }
 }

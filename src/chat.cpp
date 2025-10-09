@@ -8,7 +8,7 @@
 #include <iostream>
 static bool is_chatting = false;
 static std::mutex consoleMutex;  
-static std::string inputBuffer,commandBuffer;  
+static std::string inputBuffer,commandBuffer,other_user;
 
 
 static std::string rule_book =
@@ -30,9 +30,7 @@ void CHAT::sendData(){
 
                 inputBuffer.clear();
                 commandBuffer.clear();
-
-                std::string chatcommand, command_user, extra;
-
+                std::string chatcommand, command_user, extra;  
                 iss >> chatcommand >> command_user >> extra; 
 
                 if (!chatcommand.empty() && !command_user.empty() && extra.empty() && chatcommand=="/chat") {
@@ -42,9 +40,8 @@ void CHAT::sendData(){
                     }
                     std::string is_blank_message;
                     is_chatting = true;
+                    other_user = command_user;
                     std::cout << "\n\033[32mYou : \033[0m";
-                    inputBuffer.clear();
-                    
                     while(true){
                         char ch = _getch();
 
@@ -82,7 +79,6 @@ void CHAT::sendData(){
                     }
                 } 
                 else if(!chatcommand.empty() && chatcommand=="/logout" && command_user.empty() && extra.empty()){
-                    commandBuffer.clear();
                     std::cout<<'\n';
                     break;
                 }
@@ -106,7 +102,7 @@ void CHAT::sendData(){
     catch(const std::exception& e)
     {
         std::cerr << "\033[31m[SOMETHING WENT WRONG!!]\033[0m\n";
-        exit(-1);
+        return;
     }
     
 }
@@ -122,7 +118,13 @@ void CHAT::recieveData(){
                 std::lock_guard<std::mutex> lock(consoleMutex);
                 std::cout << "\r\033[K\r";
                 if(is_chatting){
-                    std::cout <<"\033[36m"<<message_recieved.first <<" : \033[0m"<< message_recieved.second<< "\n\033[32mYou : \033[0m" << inputBuffer<<std::flush;
+
+                    if(other_user!=message_recieved.first){
+                        std::cout <<"\033[31m[New message from "<<message_recieved.first <<" : "<< message_recieved.second<< "]\n\033[32mYou : \033[0m" << inputBuffer<<std::flush;
+                    }
+                    else{
+                        std::cout <<"\033[36m"<<message_recieved.first <<" : \033[0m"<< message_recieved.second<< "\n\033[32mYou : \033[0m" << inputBuffer<<std::flush;
+                    }
                 }
                 else{
                     std::cout <<"\033[31m[New message from "<<message_recieved.first<<" : "<<message_recieved.second << "]\033[0m\n> : " << commandBuffer<<std::flush;
@@ -133,7 +135,7 @@ void CHAT::recieveData(){
     catch(const std::exception& e)
     {
         std::cerr << "\033[31m[SOMETHING WENT WRONG!!]\033[0m\n";
-        exit(-1);
+        return;
     }
     
 }
