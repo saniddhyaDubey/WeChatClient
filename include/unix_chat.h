@@ -12,6 +12,7 @@ namespace CD {
     extern std::string user_cmd_buffer;
     extern std::string rule_book;
     extern std::mutex console_mutex;
+    extern std::string current_recipient;
 
     void init();
     void cleanUpTio();

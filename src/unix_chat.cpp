@@ -8,6 +8,7 @@ namespace CD {
     std::string user_cmd_buffer;
     static bool is_chatting = false;
     std::mutex console_mutex;
+    std::string current_recipient;
     std::string rule_book = "\033[35mInstructions: /chat username : chat username   /logout : Logout   /stop : stop chatting with current user\033[0m\n";
 
     void init() {
@@ -26,99 +27,104 @@ namespace CD {
     void sendData(){
         try
         {
-            init();
             std::cout<<rule_book;
+            
+            init();
+            std::cout<< "> : ";
             std::cout.flush();
 
+            user_cmd_buffer.clear();
+
             while(true){
+                char cmd_ch;
+                read(STDIN_FILENO, &cmd_ch, 1);
 
-                std::cout<< "> : ";
-                std::cout.flush();
+                if(cmd_ch == '\n' || cmd_ch == '\r'){
+                    std::cout << "\n";
+                    std::istringstream iss(user_cmd_buffer);
+                    std::string command_switch, current_receiver, extra_input;
+                    iss >> command_switch >> current_receiver >> extra_input;
 
-                while(true){
-                    char cmd_ch;
-                    read(STDIN_FILENO, &cmd_ch, 1);
+                    user_cmd_buffer.clear();
 
-                    if(cmd_ch == '\n' || cmd_ch == '\r'){
-                        std::cout << "\n";
+                    if(!command_switch.empty() && command_switch=="/logout"){
+                        cleanUpTio();
                         break;
-                    }else if(cmd_ch == 127 || cmd_ch == 8){
-                        if(!user_cmd_buffer.empty()) {
-                            user_cmd_buffer.pop_back();
-                            std::cout << "\b \b";
+                    }else if(!command_switch.empty() && !current_receiver.empty() && extra_input.empty() && command_switch=="/chat"){
+                        if(current_receiver==CONFIG::client_username){
+                            std::cout<<"\033[31mEcho! Change username.\033[0m\n> : ";
                             std::cout.flush();
+                            continue;
                         }
-                    }else if(cmd_ch >= 32 && cmd_ch < 127) {
-                        user_cmd_buffer += cmd_ch;
-                        std::cout << cmd_ch;
+
+                        //allow chatting!
+                        is_chatting = true;
+                        current_recipient = current_receiver;
+                        user_msg_buffer.clear();
+                        std::cout << "\033[32m[YOU]: \033[0m";
                         std::cout.flush();
-                    }
-                }
 
-                std::string command_switch, command_user;
-                // std::getline(std::cin, user_input);
-                std::istringstream iss(user_cmd_buffer);
-                iss >> command_switch;
-                iss >> command_user;
-
-                if(command_switch=="/logout"){
-                    user_cmd_buffer.clear();
-                    cleanUpTio();
-                    break;
-                }else if(command_switch=="/chat" && command_user!=""){
-                    if(command_user==CONFIG::client_username){
-                        std::cout<<"\n\033[31mEcho! Change username.\033[0m\n> : ";
-                        continue;
-                    }
-
-                    user_cmd_buffer.clear();
-                    is_chatting = true;
-                    std::string is_blank_message;
-                    
-                    while(true){
-                        std::cout<<"\033[32m[YOU]:\033[0m ";
-                        std::cout.flush();
                         while(true){
-                            char ch;
-                            read(STDIN_FILENO, &ch, 1);
+                            char msg_ch;
+                            read(STDIN_FILENO, &msg_ch, 1);
 
-                            if(ch == '\n' || ch == '\r') {
+                            if(msg_ch == '\n' || msg_ch == '\r'){
                                 std::cout << "\n";
-                                break;
-                            }else if(ch == 127 || ch == 8) {
-                                if(!user_msg_buffer.empty()) {
+
+                                //check messages:
+                                std::string is_blank_message;
+                                std::istringstream issb(user_msg_buffer);
+                                is_blank_message.clear();
+                                issb >> is_blank_message;
+
+                                if(user_msg_buffer == "/stop"){
+                                    user_msg_buffer.clear();
+                                    is_chatting=false;
+                                    std::cout<<"> : ";
+                                    break;
+                                }
+                                if(is_blank_message.empty()){
+                                    std::cout<<"\033[31mBlank Message\033[0m\n";
+                                    user_msg_buffer.clear();
+                                    std::cout << "\033[32m[YOU]: \033[0m";
+                                    std::cout.flush();
+                                    continue;
+                                }                                
+
+                                int send_response = US::sendData(user_msg_buffer, current_recipient);
+
+                                user_msg_buffer.clear();
+                                std::cout << "\033[32m[YOU]: \033[0m";
+                                std::cout.flush();
+
+                            }else if(msg_ch == 127 || msg_ch == 8){
+                                if(!user_msg_buffer.empty()){
                                     user_msg_buffer.pop_back();
                                     std::cout << "\b \b";
                                     std::cout.flush();
                                 }
-                            }else if(ch >= 32 && ch < 127) {
-                                user_msg_buffer += ch;
-                                std::cout << ch;
+                            }else{
+                                user_msg_buffer += msg_ch;
+                                std::cout << msg_ch;
                                 std::cout.flush();
                             }
-                        }
+                        }  
 
-                        std::istringstream issb(user_msg_buffer);
-                        is_blank_message.clear();
-                        issb>>is_blank_message;
-
-                        if(is_blank_message.empty()){
-                            std::cout<<"\033[31mBlank Message\033[0m\n";
-                            user_msg_buffer.clear();
-                            continue;
-                        }
-                        
-                        if(user_msg_buffer=="/stop"){
-                            user_msg_buffer.clear();
-                            is_chatting = false;
-                            break;
-                        }
-                        
-                        int send_response = US::sendData(user_msg_buffer, command_user);
-                        user_msg_buffer.clear();
+                    }else{
+                        std::cout << "\033[31mIncorrect command! Please follow Instructions listed above.\033[0m\n> : ";
+                        std::cout.flush();
                     }
-                }else {
-                    std::cout << "\033[31mIncorrect command! Please follow Instructions listed above.\033[0m\n";
+
+                }else if(cmd_ch == 127 || cmd_ch == 8){
+                    if(!user_cmd_buffer.empty()) {
+                        user_cmd_buffer.pop_back();
+                        std::cout << "\b \b";
+                        std::cout.flush();
+                    }
+                }else if(cmd_ch >= 32 && cmd_ch <= 126){
+                    user_cmd_buffer += cmd_ch;
+                    std::cout << cmd_ch;
+                    std::cout.flush();
                 }
             }
         }
@@ -145,8 +151,14 @@ namespace CD {
                     std::cout << "\r\033[K";
 
                     if(is_chatting){
-                        // Print: [SENDER]: message
-                        std::cout << "\033[36m[" << received_messages.first << "]:\033[0m " << received_messages.second << "\n";
+
+                        if(received_messages.first != current_recipient){
+                            // Print: [SENDER]: message
+                            std::cout << "\033[31m[New message from " << received_messages.first << ": " << received_messages.second << "]\033[0m\n";
+                        }else{
+                            // Print: [SENDER]: message
+                            std::cout << "\033[36m[" << received_messages.first << "]:\033[0m " << received_messages.second << "\n";
+                        }
                         
                         // Redraw the input prompt with current buffer
                         std::cout << "\033[32m[YOU]:\033[0m " << user_msg_buffer;
@@ -156,7 +168,7 @@ namespace CD {
                         std::cout << "\033[31m[New message from " << received_messages.first << ": " << received_messages.second << "]\033[0m\n";
                         
                         // Redraw the input prompt with current buffer
-                        std::cout << user_cmd_buffer;
+                        std::cout << "> : " << user_cmd_buffer;
                         std::cout.flush();
                     }                
                 }

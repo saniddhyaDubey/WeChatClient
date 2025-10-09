@@ -85,7 +85,7 @@ bool loginUser(std::string username, std::string password){
             return false;   
         }
         else if(login_response.status_code == (long) 401){
-            std::cerr << "\033[31mWrong Credentials]\033[0m\n";
+            std::cerr << "\033[31m[Wrong Credentials]\033[0m\n";
             return false;   
         }
         else if(login_response.status_code == (long) 500){
