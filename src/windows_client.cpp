@@ -106,7 +106,6 @@ std::pair<std::string,std::string> WS::RecieveData(){
     }
     catch(const std::exception& e)
     {
-        std::cerr << "\033[31m[SOMETHING WENT WRONG!!]\033[0m\n";
         return {"Server","Someone tried sending you message!"};
     }
     
