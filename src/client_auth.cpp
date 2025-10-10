@@ -64,6 +64,10 @@ void registerUser(const std::string &input_username, const std::string &input_pa
             std::cerr << "\033[31m[Username taken!]\033[0m\n";
             return;
         }
+        else if(register_response.status_code == (long) 429){
+            std::cerr << "\033[31m[The server is experiencing high traffic. Your request cannot be processed right now. Please try again later!]\033[0m\n";
+            return;
+        }
         else{
             std::cerr << "\033[31m[CANNOT REGISTER..SERVER IS SICK!!]\033[0m\n";
             return;
@@ -139,6 +143,10 @@ bool loginUser(std::string input_username, std::string input_password){
         }
         else if(login_response.status_code == (long) 250){
             std::cerr << "\033[31m[Duplicate session!]\033[0m\n";
+            return false;   
+        }
+        else if(login_response.status_code == (long) 429){
+            std::cerr << "\033[31m[The server is experiencing high traffic. Your request cannot be processed right now. Please try again later!]\033[0m\n";
             return false;   
         }
         else{
