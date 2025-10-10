@@ -14,3 +14,6 @@ Makefile
 # Ignore your CMakeLists.txt (optional, as requested)
 CMakeLists.txt
 code_standards.txt
+
+#ignore config
+config.cpp
